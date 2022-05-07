@@ -1,0 +1,70 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - openjdk-11-jre
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        pkg:
+          - docker-ce 
+          - docker-ce-cli 
+          - containerd.io 
+          - docker-compose-plugin
+        state: latest
+        update_cache: true
+
+    - name: Add Jenkins GPG apt Key
+      apt_key:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+        state: present
+
+    - name: Add Jenkins Repository
+      apt_repository:
+        repo: deb https://pkg.jenkins.io/debian-stable binary
+        state: present
+
+    - name: Update apt and install jenkins
+      apt:
+        name: jenkins
+        state: latest
+        update_cache: true
+
+    - name: Add Node.js Repository
+      apt_repository:
+        repo: deb https://deb.nodesource.com/setup_18.x
+        state: present
+
+    - name: Update apt and install Node.js
+      apt:
+        name: nodejs
+        state: latest
+        update_cache: true
+   
