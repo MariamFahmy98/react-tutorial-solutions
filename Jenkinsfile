@@ -76,14 +76,15 @@ pipeline {
           echo "container health: ${containerHealth}"
 
           if(containerHealth == "true") {
+
+            sh "sed -i 's|^    proxy_pass      http://app-.*:80;\$|    proxy_pass      http://app-${GIT_COMMIT}:80;|' /home/mariamfahmy2498/tic-tac-toe-devops-project/conf/nginx.conf"
+            sh 'docker stop app-${GIT_PREVIOUS_COMMIT} || true'
+
             if(env.GIT_PREVIOUS_SUCCESSFUL_COMMIT) {
-              sh "sed -i 's/app-${GIT_PREVIOUS_SUCCESSFUL_COMMIT}/app-${GIT_COMMIT}/' /home/mariamfahmy2498/react-tutorial-solutions/conf/nginx.conf"
-              sh 'docker stop app-${GIT_PREVIOUS_SUCCESSFUL_COMMIT}'
               echo "green deployment: app-${GIT_PREVIOUS_SUCCESSFUL_COMMIT}"
-              echo "blue deployyment: app-${GIT_COMMIT}"
-            } else {
-              sh "sed -i 's/app-blue/app-${GIT_COMMIT}/' /home/mariamfahmy2498/react-tutorial-solutions/conf/nginx.conf"
             }
+
+            echo "blue deployyment: app-${GIT_COMMIT}"
           }
         }
 
@@ -97,7 +98,7 @@ pipeline {
 
           if(proxyHealth == "false") {
             sh 'docker rm -f proxy-server || true'
-            sh 'docker run --name proxy-server -p 80:80 -v /home/mariamfahmy2498/react-tutorial-solutions/conf/nginx.conf:/etc/nginx/conf.d/default.conf:ro -d --network siemens nginx:1.21.6-alpine'
+            sh 'docker run --name proxy-server -p 80:80 -v /home/mariamfahmy2498/tic-tac-toe-devops-project/conf/nginx.conf:/etc/nginx/conf.d/default.conf:ro -d --network siemens nginx:1.21.6-alpine'
           } else {
             sh 'docker kill -s HUP proxy-server'
           }
@@ -110,15 +111,19 @@ pipeline {
         sh 'npm run test:e2e'
       }
     }
+  }
 
-    post {
-      success {
-        mail to: mariamfahmy66@gmail.com, subject: 'Success'
-      }
+  post {
+    failure {
+      mail to: "mariamfahmy66@gmail.com",
+      subject: "jenkins build:${currentBuild.currentResult}: ${env.JOB_NAME}",
+      body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}\nMore Info can be found here: ${env.BUILD_URL}"
+    }
 
-      failure {
-        mail to: mariamfahmy66@gmail.com, subject: 'Failure'
-      }
+    success {
+      mail to: "mariamfahmy66@gmail.com",
+      subject: "jenkins build:${currentBuild.currentResult}: ${env.JOB_NAME}",
+      body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}\nMore Info can be found here: ${env.BUILD_URL}"
     }
   }
 }
