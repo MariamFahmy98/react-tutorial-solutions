@@ -13,15 +13,15 @@ class Game extends React.Component {
           squares: Array(9).fill(null),
           location: {
             col: 0,
-            row: 0
+            row: 0,
           },
           active: false,
-          moveNumber: 0
-        }
+          moveNumber: 0,
+        },
       ],
       xIsNext: true,
       stepNumber: 0,
-      toggle: false
+      toggle: false,
     };
   };
 
@@ -31,10 +31,10 @@ class Game extends React.Component {
     this.setState(this.initialize());
   };
 
-  jumpTo = step => {
+  jumpTo = (step) => {
     let history = this.state.history;
 
-    history.forEach(item => {
+    history.forEach((item) => {
       item.active = false;
     });
 
@@ -42,11 +42,11 @@ class Game extends React.Component {
     this.setState({
       history: history,
       stepNumber: step,
-      xIsNext: step % 2 === 0
+      xIsNext: step % 2 === 0,
     });
   };
 
-  handleClick = i => {
+  handleClick = (i) => {
     /**
      * If we jumped to some previous step, and then make
      * a new move from that point, we throw away all "future"
@@ -78,27 +78,27 @@ class Game extends React.Component {
      * concat() method does not mutate the Array
      * unlike Array.push().
      */
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       history: history.concat([
         {
           squares: squares,
           location: {
             col: col,
-            row: row
+            row: row,
           },
           active: false,
-          moveNumber: history.length
-        }
+          moveNumber: history.length,
+        },
       ]),
       xIsNext: !prevState.xIsNext,
-      stepNumber: history.length
+      stepNumber: history.length,
     }));
   };
 
   toggleMoves = () => {
     const toggle = !this.state.toggle;
     this.setState({
-      toggle: toggle
+      toggle: toggle,
     });
   };
 
@@ -111,11 +111,11 @@ class Game extends React.Component {
       [1, 4, 7],
       [2, 5, 8],
       [0, 4, 8],
-      [2, 4, 6]
+      [2, 4, 6],
     ];
     let result = {
       status: "",
-      win: {}
+      win: {},
     };
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
@@ -126,12 +126,12 @@ class Game extends React.Component {
       ) {
         result = {
           status: "win",
-          win: { player: squares[a], squares: [a, b, c] }
+          win: { player: squares[a], squares: [a, b, c] },
         };
         return result;
       }
     }
-    let tempSq = squares.filter(item => item === null);
+    let tempSq = squares.filter((item) => item === null);
     if (tempSq.length === 0) {
       result = { status: "draw", win: {} };
       return result;
@@ -188,44 +188,50 @@ class Game extends React.Component {
     }
     return (
       <div className="game">
-        {/** If there is a draw, hide the game board and show 
+        {
+          /** If there is a draw, hide the game board and show 
           "Play again" button */
-        gameStatus === "draw" ? (
-          <div className="draw">
-            <h2>Draw!</h2>
-            <button onClick={() => this.reset()}>Play again</button>
-          </div>
-        ) : (
-          /** Otherwise, show the game board */
-          <div className="game-board">
-            <Board
-              squares={current.squares}
-              winningSquares={gameStatus === "win" ? result.win.squares : []}
-              onClick={(i, col, row) => this.handleClick(i, col, row)}
-            />
-            {/** Depending upon the state of the game, either show 
+          gameStatus === "draw" ? (
+            <div className="draw">
+              <h2>Draw!</h2>
+              <button onClick={() => this.reset()}>Play again</button>
+            </div>
+          ) : (
+            /** Otherwise, show the game board */
+            <div className="game-board">
+              <Board
+                squares={current.squares}
+                winningSquares={gameStatus === "win" ? result.win.squares : []}
+                onClick={(i, col, row) => this.handleClick(i, col, row)}
+              />
+              {
+                /** Depending upon the state of the game, either show 
               "Play again" button or "Reset game" button */
-            gameStatus === "win" ? (
-              <div className="win">
-                <h2>{`"${result.win.player}" is winner!`}</h2>
-                <button onClick={() => this.reset()}>Play again</button>
-              </div>
-            ) : (
-              <div className="reset">
-                <button onClick={() => this.reset()}>Reset game</button>
-              </div>
-            )}
-          </div>
-        )}
+                gameStatus === "win" ? (
+                  <div className="win">
+                    <h2>{`"${result.win.player}" is winner!`}</h2>
+                    <button onClick={() => this.reset()}>Play again</button>
+                  </div>
+                ) : (
+                  <div className="reset">
+                    <button onClick={() => this.reset()}>Reset game</button>
+                  </div>
+                )
+              }
+            </div>
+          )
+        }
 
         <div className="game-info">
           <div>{status}</div>
-          {/** Show the toggle button only if there are two or more moves to sort */
-          history.length > 1 ? (
-            <button onClick={() => this.toggleMoves()}>Toggle moves</button>
-          ) : (
-            ""
-          )}
+          {
+            /** Show the toggle button only if there are two or more moves to sort */
+            history.length > 1 ? (
+              <button onClick={() => this.toggleMoves()}>Toggle moves</button>
+            ) : (
+              ""
+            )
+          }
           <ol>{moves}</ol>
         </div>
       </div>

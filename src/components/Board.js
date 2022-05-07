@@ -3,7 +3,7 @@ import Square from "./Square";
 import "../index.css";
 
 class Board extends React.Component {
-  highlightSquares = i => {
+  highlightSquares = (i) => {
     if (this.props.winningSquares.length > 0) {
       if (this.props.winningSquares.indexOf(i) > -1) {
         return "square winningSquares";

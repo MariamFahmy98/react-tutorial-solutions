@@ -3,18 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "gh-pages": "^3.0.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.1"
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-scripts": "^5.0.1",
+    "source-map-explorer": "^2.5.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.2.0",
+    "eslint": "^8.14.0",
+    "eslint-plugin-react": "^7.29.4",
+    "prettier": "2.6.2",
+    "puppeteer": "^13.7.0"
   },
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --testPathIgnorePatterns=src/e2e-tests/",
+    "test:e2e": "react-scripts test --testPathPattern=src/e2e-tests/", 
+    "eject": "react-scripts eject",
+    "prettify": "prettier .",
+    "lint": "eslint src",
+    "analyze": "source-map-explorer 'build/static/js/*.js' --html"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -25,5 +37,5 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "homepage": "https://harman052.github.io/react-tutorial-solutions"
+  "homepage": "./"
 }
