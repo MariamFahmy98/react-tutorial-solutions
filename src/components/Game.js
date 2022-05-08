@@ -10,10 +10,10 @@ class Game extends React.Component {
     return {
       history: [
         {
-                squares: Array(9).fill(null),
-                location: {
-            col: 0,
-            row: 0,
+          squares: Array(9).fill(null),
+          location: {
+          col: 0,
+          row: 0,
           },
           active: false,
           moveNumber: 0,
