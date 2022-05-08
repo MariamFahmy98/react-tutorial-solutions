@@ -5,5 +5,5 @@ import Game from "../components/Game";
 
 it("Next Player Text Renders with Correct Initial State", () => {
   render(<Game />);
-  expect(screen.getByText("next")).toBeInTheDocument();
+  expect(screen.getByText("Next player: X")).toBeInTheDocument();
 });
