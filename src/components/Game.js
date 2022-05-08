@@ -6,12 +6,12 @@ class Game extends React.Component {
   /**
    * Initial state of the game
    */
-  initialize = () => {
+    initialize = () => {
     return {
       history: [
         {
-          squares: Array(9).fill(null),
-          location: {
+                squares: Array(9).fill(null),
+                location: {
             col: 0,
             row: 0,
           },
