@@ -77,13 +77,10 @@ pipeline {
 
           if(containerHealth == "true") {
 
-            sh "sed -i 's|^    proxy_pass      http://app-.*:80;\$|    proxy_pass      http://app-${GIT_COMMIT}:80;|' /home/mariamfahmy2498/tic-tac-toe-devops-project/conf/nginx.conf"
+            sh "sed -i 's|^    proxy_pass      http://app-.*:80;\$|    proxy_pass      http://app-${GIT_COMMIT}:80;|' /home/mariamfahmy2498/tic-tac-toe-devops-project/conf/nginx/default.conf"
             sh 'docker stop app-${GIT_PREVIOUS_COMMIT} || true'
 
-            if(env.GIT_PREVIOUS_SUCCESSFUL_COMMIT) {
-              echo "green deployment: app-${GIT_PREVIOUS_SUCCESSFUL_COMMIT}"
-            }
-
+            echo "green deployment: app-${GIT_PREVIOUS_COMMIT}"
             echo "blue deployyment: app-${GIT_COMMIT}"
           }
         }
@@ -98,7 +95,7 @@ pipeline {
 
           if(proxyHealth == "false") {
             sh 'docker rm -f proxy-server || true'
-            sh 'docker run --name proxy-server -p 80:80 -v /home/mariamfahmy2498/tic-tac-toe-devops-project/conf/nginx.conf:/etc/nginx/conf.d/default.conf:ro -d --network siemens nginx:1.21.6-alpine'
+            sh 'docker run --name proxy-server -p 80:80 -v /home/mariamfahmy2498/tic-tac-toe-devops-project/conf/nginx/:/etc/nginx/conf.d/:ro -d --network siemens nginx:1.21.6-alpine'
           } else {
             sh 'docker kill -s HUP proxy-server'
           }
