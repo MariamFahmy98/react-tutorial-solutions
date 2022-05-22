@@ -94,7 +94,7 @@ pipeline {
           echo "proxy health: ${proxyHealth}"
 
           if(proxyHealth == "false") {
-            sh 'docker rm -f proxy-server || true'
+            //sh 'docker rm -f proxy-server || true'
             sh 'docker run --name proxy-server -p 80:80 -v /home/mariamfahmy2498/tic-tac-toe-devops-project/conf/nginx/:/etc/nginx/conf.d/:ro -d --network siemens nginx:1.21.6-alpine'
           } else {
             sh 'docker kill -s HUP proxy-server'
